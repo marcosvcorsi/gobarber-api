@@ -1,19 +1,19 @@
 import { getRepository } from 'typeorm';
-import User from '../entities/User';
+import User from '../infra/typeorm/entities/User';
 import fs from 'fs';
 import path from 'path';
 
-import uploadConfig from '../../../config/upload';
+import uploadConfig from '@config/upload';
 
-import AppError from '../../../shared/errors/AppError';
+import AppError from '@shared/errors/AppError';
 
-interface Request {
+interface IRequest {
   user_id: string;
   avatar_filename: string;
 }
 
 class UpdateUserAvatarService {
-  public async execute({ user_id, avatar_filename }: Request): Promise<User> {
+  public async execute({ user_id, avatar_filename }: IRequest): Promise<User> {
     const usersRepository = getRepository(User);
 
     const user = await usersRepository.findOne(user_id);
