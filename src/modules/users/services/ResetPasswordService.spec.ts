@@ -45,7 +45,7 @@ describe('ResetPassword', () => {
   });
 
   it('should not be able to reset the password with invalid token', async () => {
-    expect(
+    await expect(
       resetPasswordService.execute({
         token: 'non-existing-token',
         password: '123123',
@@ -58,7 +58,7 @@ describe('ResetPassword', () => {
       'non-existing-user',
     );
 
-    expect(
+    await expect(
       resetPasswordService.execute({
         token,
         password: '123123',
@@ -81,7 +81,7 @@ describe('ResetPassword', () => {
       return customDate.setHours(customDate.getHours() + 3);
     });
 
-    expect(
+    await expect(
       resetPasswordService.execute({
         token,
         password: '123123',
