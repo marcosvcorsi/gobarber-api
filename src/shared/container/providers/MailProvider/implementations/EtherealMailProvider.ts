@@ -12,19 +12,23 @@ class EtherealMailProdiver implements IMailProvider {
     @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
-    nodemailer.createTestAccount().then(account => {
-      const transporter = nodemailer.createTransport({
-        host: account.smtp.host,
-        port: account.smtp.port,
-        secure: account.smtp.secure,
-        auth: {
-          user: account.user,
-          pass: account.pass,
-        },
-      });
+    nodemailer
+      .createTestAccount()
+      .then(account => {
+        console.log(account);
 
-      this.client = transporter;
-    });
+        const transporter = nodemailer.createTransport({
+          host: account.smtp.host,
+          port: account.smtp.port,
+          secure: account.smtp.secure,
+          auth: {
+            user: account.user,
+            pass: account.pass,
+          },
+        });
+        this.client = transporter;
+      })
+      .catch(err => console.log(err));
   }
 
   public async sendEmail({
@@ -33,21 +37,23 @@ class EtherealMailProdiver implements IMailProvider {
     from,
     templateData,
   }: ISendMailDTO): Promise<void> {
-    const message = await this.client.sendMail({
-      from: {
-        name: from?.name || 'Equipe GoBarber',
-        address: from?.email || 'equipe@gobarber.com.br',
-      },
-      to: {
-        name: to.name,
-        address: to.email,
-      },
-      subject,
-      html: await this.mailTemplateProvider.parse(templateData),
-    });
+    if (this.client) {
+      const message = await this.client.sendMail({
+        from: {
+          name: from?.name || 'Equipe GoBarber',
+          address: from?.email || 'equipe@gobarber.com.br',
+        },
+        to: {
+          name: to.name,
+          address: to.email,
+        },
+        subject,
+        html: await this.mailTemplateProvider.parse(templateData),
+      });
 
-    console.log('Message sent: %s', message.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
+      console.log('Message sent: %s', message.messageId);
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
+    }
   }
 }
 
