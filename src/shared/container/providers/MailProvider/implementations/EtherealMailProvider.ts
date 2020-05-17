@@ -5,7 +5,7 @@ import ISendMailDTO from '../dtos/ISendMailDTO';
 import IMailTemplateProvider from '../../MailTemplateProvider/models/IMailTemplateProvider';
 
 @injectable()
-class EtherealMailProdiver implements IMailProvider {
+class EtherealMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor(
@@ -55,4 +55,4 @@ class EtherealMailProdiver implements IMailProvider {
   }
 }
 
-export default EtherealMailProdiver;
+export default EtherealMailProvider;
