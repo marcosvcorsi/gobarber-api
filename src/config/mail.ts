@@ -14,8 +14,8 @@ export default {
 
   defaults: {
     from: {
-      email: 'marcos@teste.com.br',
-      name: 'Marcos Teste',
+      email: 'noreply@marcoscorsi.com',
+      name: 'Marcos Corsi',
     },
   },
 } as IMailConfig;

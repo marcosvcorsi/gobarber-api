@@ -32,8 +32,8 @@ class SESMailProdiver implements IMailProvider {
 
     await this.client.sendMail({
       from: {
-        name,
-        address: email,
+        name: from?.name || name,
+        address: from?.email || email,
       },
       to: {
         name: to.name,
