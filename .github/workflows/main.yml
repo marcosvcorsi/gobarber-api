@@ -36,8 +36,8 @@ jobs:
         source: ".,!node_modules"
         target: "~/app/node-deploy"
     
-    # instalar dependencias no servidor
-    - name: Install dependencies on server
+    # instalar dependencias no servidor, rodar migrations e reiniciar servidor
+    - name: Install dependencies, run migrations and restart server
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -46,26 +46,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           cd ~/app/node-deploy
-          yarn 
-    
-    # executar as migrations
-    - name: Run migrations on server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          cd ~/app/node-deploy
-          ./node_modules/.bin/typeorm migration:run 
-    
-    # restart no server node
-    - name: Restart node on server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.SSH_KEY }}
-        script: pm2 restart gobarber-api
+          yarn
+          ./node_modules/.bin/typeorm migration:run
+          pm2 restart gobarber-api  
+          
